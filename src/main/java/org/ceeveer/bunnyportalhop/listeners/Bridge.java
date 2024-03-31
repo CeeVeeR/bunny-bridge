@@ -8,6 +8,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.util.Vector;
 
+import static org.bukkit.Bukkit.getLogger;
+
 public class Bridge implements Listener {
 
     private final World worldBelow;
@@ -23,6 +25,13 @@ public class Bridge implements Listener {
         this.worldAbove = worldAbove;
         this.worldAboveThreshold = worldAboveThreshold;
         this.teleportOffset = teleportOffset;
+
+        getLogger().info("Created Bridge: " +
+                "World Below: " + worldBelow.getName() + ", " +
+                "Threshold Below: " + worldBelowThreshold + ", " +
+                "World Above: " +  worldAbove.getName() + ", " +
+                "Threshold Above: " + worldAboveThreshold + ", " +
+                "Teleport Offset: " + teleportOffset);
     }
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {

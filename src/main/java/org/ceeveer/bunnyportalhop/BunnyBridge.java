@@ -1,71 +1,60 @@
 package org.ceeveer.bunnyportalhop;
 
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
-import org.ceeveer.bunnyportalhop.listeners.Bridge;
+import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.ceeveer.bunnyportalhop.adapters.AdapterManager;
+import org.ceeveer.bunnyportalhop.adapters.PhantomWorldsAdapter;
+import org.ceeveer.bunnyportalhop.adapters.PluginAdapter;
+import org.ceeveer.bunnyportalhop.listeners.Bridge;
+import org.ceeveer.bunnyportalhop.utils.ConfigManager;
 
 public final class BunnyBridge extends JavaPlugin {
 
-    private static final String PHANTOM_WORLDS_PLUGIN = "PhantomWorlds";
     private ConfigManager configManager;
+    private AdapterManager adapterManager;
 
     @Override
     public void onEnable() {
-        // Check for PhantomWorlds dependency
+        this.configManager = new ConfigManager(this);
+        this.adapterManager = new AdapterManager();
 
+        PhantomWorldsAdapter pwAdapter = new PhantomWorldsAdapter(configManager, this);
 
+        adapterManager.addAdapter(pwAdapter);
+        adapterManager.initializeAdapters();
 
+        if (adapterManager.isAnyAdapterEnabled()) {
+            for (PluginAdapter adapter : adapterManager.getAdapters()) {
+                World worldBelow = adapter.getWorldBelow();
+                World worldAbove = adapter.getWorldAbove();
 
-
-            configManager = new ConfigManager(this);
-
-            if (Bukkit.getWorld(configManager.getWorldBelow()) != null && Bukkit.getWorld(configManager.getWorldAbove())  != null) {
-
-                Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
-                WorldManager worldManager = new WorldManager(this);
-                Plugin pwpl = this.getServer().getPluginManager().getPlugin("PhantomWorlds");
-
-                if (pwpl == null || !pwpl.isEnabled()) {
-                    getLogger().severe(PHANTOM_WORLDS_PLUGIN + " dependency not found. Disabling plugin.");
-                    disable();
-                    return;
+                if (worldBelow != null && worldAbove != null) {
+                    registerEventListeners(worldBelow, worldAbove);
+                    break;
                 }
-
-                getLogger().info(PHANTOM_WORLDS_PLUGIN + " dependency found!");
-
-                if (worldManager.load(configManager.getWorldBelow()) && worldManager.load(configManager.getWorldAbove())){
-
-                    registerEventListeners();
-                } else {
-                    getLogger().severe("Unexpected error occurred while initializing");
-                }
-            }, 20L);
-
             }
-
-
-
-
-
-
+        } else {
+            getLogger().warning("No adapters enabled. Disabling plugin.");
+            disable();
+        }
     }
 
-    private void registerEventListeners() {
+    private void registerEventListeners(World worldBelow, World worldAbove) {
         Bridge bridge = new Bridge(
-                Bukkit.getWorld(configManager.getWorldBelow()),
+                worldBelow,
                 configManager.getWorldBelowThreshold(),
-                Bukkit.getWorld(configManager.getWorldAbove()),
+                worldAbove,
                 configManager.getWorldAboveThreshold(),
                 configManager.getTeleportOffset()
-
         );
-        Bukkit.getPluginManager().registerEvents(bridge, this);
+
+        getServer().getPluginManager().registerEvents(bridge, this);
     }
 
     void disable() {
-        getLogger().severe("Disabling " + getName());
+        getLogger().warning("Disabling " + getName());
         getServer().getPluginManager().disablePlugin(this);
+        adapterManager.disableAdapters();
     }
 
     @Override
