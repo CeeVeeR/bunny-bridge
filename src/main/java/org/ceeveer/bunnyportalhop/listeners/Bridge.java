@@ -7,7 +7,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.util.Vector;
-import org.ceeveer.bunnyportalhop.BunnyBridge;
 
 public class Bridge implements Listener {
 
