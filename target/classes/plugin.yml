@@ -1,0 +1,9 @@
+name: BunnyBridge
+version: '1.0-SNAPSHOT'
+main: org.ceeveer.bunnyportalhop.BunnyBridge
+api-version: '1.20'
+prefix: BB
+authors: [CeeVeeR]
+description: A spigot plugin to bridge dimensions together.
+website: https://github.com/CeeVeeR
+depend: [PhantomWorlds]

@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="bunny-portal-hop:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/bunny_portal_hop_jar</output-path>
+    <root id="archive" name="bunny-portal-hop.jar">
+      <element id="module-output" name="bunny-portal-hop" />
+      <element id="extracted-dir" path="$USER_HOME$/Downloads/PhantomWorlds-2.0.9.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
