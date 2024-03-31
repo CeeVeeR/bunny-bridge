@@ -34,7 +34,7 @@ public final class BunnyBridge extends JavaPlugin {
                 }
             }
         } else {
-            getLogger().warning("No adapters enabled. Disabling plugin.");
+            getLogger().severe("No adapters enabled. Disabling plugin.");
             disable();
         }
     }
