@@ -16,27 +16,39 @@ public final class BunnyBridge extends JavaPlugin {
 
 
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
 
-            Plugin pwpl = this.getServer().getPluginManager().getPlugin("PhantomWorlds");
-
-            if (pwpl == null || !pwpl.isEnabled()) {
-                getLogger().severe(PHANTOM_WORLDS_PLUGIN + " dependency not found. Disabling plugin.");
-                disable();
-                return;
-            }
-
-            getLogger().info(PHANTOM_WORLDS_PLUGIN + " dependency found!");
 
             configManager = new ConfigManager(this);
-            WorldManager worldManager = new WorldManager(this);
 
-            if (worldManager.attemptLoad(configManager.getWorldBelow()) && worldManager.attemptLoad(configManager.getWorldAbove())) {
-                registerEventListeners();
-            } else {
-                getLogger().severe("Unexpected error occurred while initializing");
+            if (Bukkit.getWorld(configManager.getWorldBelow()) != null && Bukkit.getWorld(configManager.getWorldAbove())  != null) {
+
+                Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+                WorldManager worldManager = new WorldManager(this);
+                Plugin pwpl = this.getServer().getPluginManager().getPlugin("PhantomWorlds");
+
+                if (pwpl == null || !pwpl.isEnabled()) {
+                    getLogger().severe(PHANTOM_WORLDS_PLUGIN + " dependency not found. Disabling plugin.");
+                    disable();
+                    return;
+                }
+
+                getLogger().info(PHANTOM_WORLDS_PLUGIN + " dependency found!");
+
+                if (worldManager.load(configManager.getWorldBelow()) && worldManager.load(configManager.getWorldAbove())){
+
+                    registerEventListeners();
+                } else {
+                    getLogger().severe("Unexpected error occurred while initializing");
+                }
+            }, 20L);
+
             }
-        }, 20L);
+
+
+
+
+
+
     }
 
     private void registerEventListeners() {

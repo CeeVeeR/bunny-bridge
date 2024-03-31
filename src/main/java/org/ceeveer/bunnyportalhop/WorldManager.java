@@ -12,7 +12,7 @@ public class WorldManager {
         this.plugin = plugin;
     }
 
-    protected boolean attemptLoad(String worldName) {
+    protected boolean load(String worldName) {
         WorldLoadResponse loadResponse = PhantomWorlds.worldManager().loadWorld(worldName);
         switch (loadResponse) {
             case LOADED:
