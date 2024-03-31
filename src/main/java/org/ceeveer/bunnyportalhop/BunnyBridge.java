@@ -14,18 +14,20 @@ public final class BunnyBridge extends JavaPlugin {
     public void onEnable() {
         // Check for PhantomWorlds dependency
 
-        Plugin pwpl = this.getServer().getPluginManager().getPlugin("PhantomWorlds");
-
-        if (pwpl == null || !pwpl.isEnabled()) {
-            getLogger().severe(PHANTOM_WORLDS_PLUGIN + " dependency not found. Disabling plugin.");
-            disable();
-            return;
-        }
-
-        getLogger().info(PHANTOM_WORLDS_PLUGIN + " dependency found!");
 
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+
+            Plugin pwpl = this.getServer().getPluginManager().getPlugin("PhantomWorlds");
+
+            if (pwpl == null || !pwpl.isEnabled()) {
+                getLogger().severe(PHANTOM_WORLDS_PLUGIN + " dependency not found. Disabling plugin.");
+                disable();
+                return;
+            }
+
+            getLogger().info(PHANTOM_WORLDS_PLUGIN + " dependency found!");
+
             configManager = new ConfigManager(this);
             WorldManager worldManager = new WorldManager(this);
 

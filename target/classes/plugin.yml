@@ -6,5 +6,7 @@ prefix: BB
 authors: [CeeVeeR]
 description: A spigot plugin to bridge dimensions together.
 website: https://github.com/CeeVeeR
+load: POSTWORLD
 depend: [PhantomWorlds]
+database: false
 
