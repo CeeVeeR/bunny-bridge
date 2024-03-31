@@ -13,7 +13,8 @@ public final class BunnyBridge extends JavaPlugin {
     @Override
     public void onEnable() {
         // Check for PhantomWorlds dependency
-        if (getServer().getPluginManager().getPlugin(PHANTOM_WORLDS_PLUGIN) == null || PhantomWorlds.instance() == null) {
+        PhantomWorlds pwPlugin = JavaPlugin.getPlugin(PhantomWorlds.class);
+        if (getServer().getPluginManager().getPlugin(PHANTOM_WORLDS_PLUGIN) == null || pwPlugin.instance() == null) {
             getLogger().severe(PHANTOM_WORLDS_PLUGIN + " dependency not found. Disabling plugin.");
             disable();
             return;
@@ -35,8 +36,8 @@ public final class BunnyBridge extends JavaPlugin {
                 configManager.getWorldBelowThreshold(),
                 Bukkit.getWorld(configManager.getWorldAbove()),
                 configManager.getWorldAboveThreshold(),
-                configManager.getTeleportOffset(),
-                this
+                configManager.getTeleportOffset()
+
         );
         Bukkit.getPluginManager().registerEvents(bridge, this);
     }
